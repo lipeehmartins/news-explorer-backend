@@ -33,4 +33,4 @@ Exemplos:
 
 ## Deploy
 
-Domínio HTTPS do backend (produção): `https://api.seu-dominio.com`
+Domínio HTTPS do backend (produção): `https://news-explorer-backend-xu1z.onrender.com`
