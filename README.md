@@ -34,3 +34,9 @@ Exemplos:
 ## Deploy
 
 Domínio HTTPS do backend (produção): `https://news-explorer-backend-xu1z.onrender.com`
+
+Frontend em produção (Vercel): `https://news-explorer-frontend-green.vercel.app`
+
+Repositório Backend: `https://github.com/lipeehmartins/news-explorer-backend`
+
+Repositório Frontend: `https://github.com/lipeehmartins/news-explorer-frontend`
