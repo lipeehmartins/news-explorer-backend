@@ -2,6 +2,7 @@ const { celebrate, Joi, Segments } = require('celebrate');
 
 const urlRegex = /^(https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}(\.[a-zA-Z0-9()]{1,24})\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
 const objectIdRegex = /^[a-f\d]{24}$/i;
+const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 const validateSignup = celebrate({
   [Segments.BODY]: Joi.object().keys({
@@ -36,9 +37,22 @@ const validateArticleId = celebrate({
   }),
 });
 
+const validateSearchNews = celebrate({
+  [Segments.QUERY]: Joi.object().keys({
+    q: Joi.string().required().trim().min(1)
+      .max(100),
+    from: Joi.string().required().pattern(isoDateRegex),
+    to: Joi.string().required().pattern(isoDateRegex),
+    pageSize: Joi.number().integer().min(1)
+      .max(100)
+      .default(100),
+  }),
+});
+
 module.exports = {
   validateSignup,
   validateSignin,
   validateCreateArticle,
   validateArticleId,
+  validateSearchNews,
 };

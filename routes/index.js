@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const authRoutes = require('./auth');
+const newsRoutes = require('./news');
 const userRoutes = require('./users');
 const articleRoutes = require('./articles');
 const auth = require('../middlewares/auth');
@@ -10,6 +11,7 @@ router.get('/health', (req, res) => {
 });
 
 router.use(authRoutes);
+router.use(newsRoutes);
 router.use(auth);
 router.use('/users', userRoutes);
 router.use('/articles', articleRoutes);
