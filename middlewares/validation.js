@@ -1,6 +1,5 @@
 const { celebrate, Joi, Segments } = require('celebrate');
 
-const urlRegex = /^(https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}(\.[a-zA-Z0-9()]{1,24})\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
 const objectIdRegex = /^[a-f\d]{24}$/i;
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -26,8 +25,8 @@ const validateCreateArticle = celebrate({
     text: Joi.string().required(),
     date: Joi.string().required(),
     source: Joi.string().required(),
-    link: Joi.string().required().pattern(urlRegex),
-    image: Joi.string().required().pattern(urlRegex),
+    link: Joi.string().required().uri({ scheme: ['http', 'https'] }),
+    image: Joi.string().required().uri({ scheme: ['http', 'https'] }),
   }),
 });
 
