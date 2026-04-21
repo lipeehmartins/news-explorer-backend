@@ -1,8 +1,15 @@
+const validator = require('validator');
 const AppError = require('../errors/app-error');
 const { STATUS_CODES } = require('../utils/constants');
 const { NEWS_API_KEY, NEWS_API_BASE_URL } = require('../utils/config');
 
-const FALLBACK_NEWS_API_BASE_URL = 'https://newsapi.org/v2';
+const FALLBACK_NEWS_API_BASE_URL = 'https://newsapi.org';
+const FALLBACK_IMAGE_URL = 'https://placehold.co/600x400?text=Sem+Imagem';
+
+const isHttpUrl = (value) => (typeof value === 'string' && validator.isURL(value, {
+  protocols: ['http', 'https'],
+  require_protocol: true,
+}));
 
 const normalizeNewsApiBaseUrl = (rawBaseUrl) => {
   const withoutTrailingSlashes = rawBaseUrl.replace(/\/+$/, '');
@@ -38,11 +45,25 @@ const normalizeArticle = (article, keyword) => ({
   keyword,
   title: article.title || 'Sem título',
   description: article.description || 'Sem descrição disponível.',
-  publishedAt: article.publishedAt,
+  publishedAt: article.publishedAt || new Date().toISOString(),
   source: article.source?.name || 'Fonte desconhecida',
-  link: article.url,
-  image: article.urlToImage || 'https://placehold.co/600x400?text=Sem+Imagem',
+  link: article.url || '',
+  image: article.urlToImage || FALLBACK_IMAGE_URL,
 });
+
+const normalizeAndFilterArticle = (article, keyword) => {
+  const normalizedArticle = normalizeArticle(article, keyword);
+
+  if (!isHttpUrl(normalizedArticle.link)) {
+    return null;
+  }
+
+  if (!isHttpUrl(normalizedArticle.image)) {
+    normalizedArticle.image = FALLBACK_IMAGE_URL;
+  }
+
+  return normalizedArticle;
+};
 
 const searchNews = async (req, res, next) => {
   const {
@@ -85,7 +106,9 @@ const searchNews = async (req, res, next) => {
     }
 
     const payload = await response.json();
-    const articles = (payload.articles || []).map((article) => normalizeArticle(article, q));
+    const articles = (payload.articles || [])
+      .map((article) => normalizeAndFilterArticle(article, q))
+      .filter(Boolean);
 
     return res.status(STATUS_CODES.OK).send({ articles });
   } catch {
