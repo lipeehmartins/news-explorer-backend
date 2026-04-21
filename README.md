@@ -15,6 +15,8 @@ Use o arquivo `.env` em produção (não versionar):
 - `NODE_ENV`
 - `MONGODB_URI`
 - `JWT_SECRET`
+- `NEWS_API_KEY`
+- `NEWS_API_BASE_URL` (opcional, padrão: `https://newsapi.org`)
 
 Modelo disponível em `.env.example`.
 
@@ -27,6 +29,7 @@ Exemplos:
 - `GET /api/users/me`
 - `POST /api/signup`
 - `POST /api/signin`
+- `GET /api/news?q=tecnologia&from=2026-04-14&to=2026-04-21&pageSize=100`
 - `GET /api/articles`
 - `POST /api/articles`
 - `DELETE /api/articles/:articleId`
