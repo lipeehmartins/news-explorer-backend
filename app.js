@@ -14,6 +14,8 @@ const { PORT, MONGO_URI } = require('./utils/config');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 mongoose.connect(MONGO_URI);
 
 app.use(helmet());
